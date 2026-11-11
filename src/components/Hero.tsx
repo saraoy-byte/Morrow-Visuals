@@ -44,6 +44,13 @@ export const Hero: React.FC<HeroProps> = ({ setCursorState }) => {
     video.addEventListener('canplay', playVideo);
     video.addEventListener('canplaythrough', playVideo);
 
+    // Seamless instant loop restart (ensures zero hang when video ends)
+    const handleEnded = () => {
+      video.currentTime = 0;
+      playVideo();
+    };
+    video.addEventListener('ended', handleEnded);
+
     // If tab visibility changes, resume playback when tab is active
     const handleVisibility = () => {
       if (!document.hidden && video.paused) {
@@ -67,6 +74,7 @@ export const Hero: React.FC<HeroProps> = ({ setCursorState }) => {
       video.removeEventListener('loadedmetadata', playVideo);
       video.removeEventListener('canplay', playVideo);
       video.removeEventListener('canplaythrough', playVideo);
+      video.removeEventListener('ended', handleEnded);
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
       document.removeEventListener('visibilitychange', handleVisibility);
@@ -88,10 +96,11 @@ export const Hero: React.FC<HeroProps> = ({ setCursorState }) => {
 
   return (
     <section id="home" className="relative min-h-[94vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-32 sm:pt-36 md:pt-40 pb-16 sm:pb-20">
-      {/* Background Loop Video */}
+      {/* Background Loop Video - Ultra-lightweight ~900KB loop stripped of audio for zero hang */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#060607]">
         <video
           ref={videoRef}
+          src="https://res.cloudinary.com/qbs6njjr/video/upload/so_0,eo_14,ac_none,q_auto:eco,w_1280,vc_h264/v1793291378/Palma_bay_Architecture_Animation_Film.mp4"
           autoPlay
           loop
           muted
@@ -101,11 +110,11 @@ export const Hero: React.FC<HeroProps> = ({ setCursorState }) => {
           className="w-full h-full object-cover object-center opacity-85 transition-opacity duration-1000"
         >
           <source
-            src="https://res.cloudinary.com/qbs6njjr/video/upload/q_auto,w_1920/v1793291378/Palma_bay_Architecture_Animation_Film.mp4"
+            src="https://res.cloudinary.com/qbs6njjr/video/upload/so_0,eo_14,ac_none,q_auto:eco,w_1280,vc_h264/v1793291378/Palma_bay_Architecture_Animation_Film.mp4"
             type="video/mp4"
           />
           <source
-            src="https://res.cloudinary.com/qbs6njjr/video/upload/v1793291378/Palma_bay_Architecture_Animation_Film.mp4"
+            src="https://res.cloudinary.com/qbs6njjr/video/upload/so_0,eo_16,ac_none,q_auto:good,w_1280,vc_h264/v1793291378/Palma_bay_Architecture_Animation_Film.mp4"
             type="video/mp4"
           />
         </video>
